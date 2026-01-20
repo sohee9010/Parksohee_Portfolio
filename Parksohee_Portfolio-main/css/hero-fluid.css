@@ -1,0 +1,36 @@
+/* ===================================
+   Hero Fluid Canvas Styling
+   =================================== */
+
+#fluid-hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: auto;
+    background: #FFFFFF;
+    display: block;
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+}
+
+.hero-split-container {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero-split-container * {
+    pointer-events: auto;
+}
+
+.hero-left,
+.hero-right {
+    z-index: 3;
+}

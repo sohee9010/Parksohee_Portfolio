@@ -1,0 +1,30 @@
+/* ===================================
+   Portfolio Stylesheet - Main Import File
+   =================================== */
+
+/* Base styles - Variables, Reset, Typography */
+@import url('css/base.css');
+
+/* Layout - Containers, Sections */
+@import url('css/layout.css');
+
+/* Components - Buttons, Forms, Tags, etc. */
+@import url('css/components.css');
+
+/* Navigation Bar */
+@import url('css/navigation.css');
+
+/* Hero Section */
+@import url('css/hero.css');
+
+/* All Sections - Profile, Skills, Projects, Career, Contact, etc. */
+@import url('css/sections.css');
+@import url('css/projects.css');
+@import url('css/email-copy.css');
+@import url('css/qr.css');
+
+/* Animations */
+@import url('css/animations.css');
+
+/* Responsive Design */
+@import url('css/responsive.css');

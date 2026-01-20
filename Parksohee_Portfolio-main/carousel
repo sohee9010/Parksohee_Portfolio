@@ -1,0 +1,1006 @@
+// ===================================
+// Enhanced Interactive Features
+// ===================================
+
+// ===================================
+// Reactive Sphere & Mouse Speed Identity
+// ===================================
+
+const glassSphere = document.getElementById('glassSphere');
+// Theme click interaction removed as per request.
+
+// 2. Magnetic Glow (Light Source following Mouse)
+const heroSection = document.querySelector('.hero');
+
+if (heroSection) {
+  heroSection.addEventListener('mousemove', (e) => {
+    // Get mouse position relative to center of screen
+    const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2); // -1 to 1
+    const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2); // -1 to 1
+
+    // Set CSS variables for the glare movement
+    // We limit the range to avoid the light goig off the sphere too much
+    heroSection.style.setProperty('--light-x', x.toFixed(2));
+    heroSection.style.setProperty('--light-y', y.toFixed(2));
+  });
+}
+
+// Ensure 'breathe-float' animation is running in CSS (~8s infinite alternate)
+// This serves as the "2. Breathing Float" part of the request.
+
+
+// Scroll Progress Indicator (Keep existing)
+const scrollProgress = document.createElement('div');
+scrollProgress.className = 'scroll-progress';
+scrollProgress.style.cssText = `
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0071E3, #5E5CE6);
+  z-index: 9999;
+  transition: width 0.1s ease;
+`;
+document.body.appendChild(scrollProgress);
+
+window.addEventListener('scroll', () => {
+  const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = (window.scrollY / windowHeight) * 100;
+  scrollProgress.style.width = scrolled + '%';
+});
+
+// ===================================
+// Navigation & Scroll
+// ===================================
+const navbar = document.getElementById('navbar');
+const navToggle = document.getElementById('navToggle');
+const navMenu = document.getElementById('navMenu');
+const navLinks = document.querySelectorAll('.nav-link');
+
+// Mobile Menu
+if (navToggle) {
+  navToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+    navToggle.classList.toggle('active');
+  });
+}
+
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    if (navMenu) navMenu.classList.remove('active');
+    if (navToggle) navToggle.classList.remove('active');
+  });
+});
+
+// Navbar Scroll Effect
+window.addEventListener('scroll', () => {
+  if (navbar) {
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }
+  updateActiveLink();
+});
+
+// Active Link Update
+function updateActiveLink() {
+  const sections = document.querySelectorAll('section');
+  const scrollPosition = window.scrollY + 100;
+
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.offsetHeight;
+    const sectionId = section.getAttribute('id');
+
+    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${sectionId}`) {
+          link.classList.add('active');
+        }
+      });
+    }
+  });
+}
+
+// ===================================
+// Scroll Animations (Intersection Observer)
+// ===================================
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+      observer.unobserve(entry.target); // Only animate once
+    }
+  });
+}, observerOptions);
+
+const fadeElements = document.querySelectorAll('.fade-in, .section-header, .project-card, .skill-row');
+fadeElements.forEach((el, index) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = 'all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1)';
+  // Stagger delay based on index within its group if needed, or simple delay
+  // el.style.transitionDelay = `${index % 3 * 0.1}s`; 
+  observer.observe(el);
+});
+
+// ===================================
+// Form Handling
+// ===================================
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('메시지가 전송되었습니다! (데모 기능)');
+    contactForm.reset();
+  });
+}
+
+// Console Easter Egg
+console.log('%c Developed by Your Name ', 'background: #3B82F6; color: #fff; border-radius: 3px; padding: 5px; font-weight: bold;');
+
+// ===================================
+// Typewriter Effect
+// ===================================
+const typewriterElement = document.getElementById('typewriter-text');
+const phrases = ["Web & Mobile", "Creative", "Problem Solving"];
+let phraseIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+let typeSpeed = 100;
+
+function typeWriter() {
+  if (!typewriterElement) return;
+
+  const currentPhrase = phrases[phraseIndex];
+
+  if (isDeleting) {
+    typewriterElement.textContent = currentPhrase.substring(0, charIndex - 1);
+    charIndex--;
+    typeSpeed = 50; // Deleting speed
+  } else {
+    typewriterElement.textContent = currentPhrase.substring(0, charIndex + 1);
+    charIndex++;
+    typeSpeed = 100; // Typing speed
+  }
+
+  if (!isDeleting && charIndex === currentPhrase.length) {
+    // Finished typing phrase
+    isDeleting = true;
+    typeSpeed = 2000; // Wait before deleting
+  } else if (isDeleting && charIndex === 0) {
+    // Finished deleting phrase
+    isDeleting = false;
+    phraseIndex = (phraseIndex + 1) % phrases.length;
+    typeSpeed = 500; // Wait before typing next
+  }
+
+  setTimeout(typeWriter, typeSpeed);
+}
+
+function startTypingLoop() {
+  typeWriter();
+}
+
+// ===================================
+// Project Data
+// ===================================
+// ===================================
+// Project Data
+// ===================================
+const projectData = {
+  1: {
+    category: "game",
+    title: "3D Interactive Web Game",
+    subtitle: "웹캠 제스처 인식 기반 인터랙티브 게임",
+    image: "images/project_1.png",
+    period: "2024.09 - 2024.11",
+    team: "개인 프로젝트",
+    role: "기획, 디자인, 풀스택 개발",
+    status: "완료",
+    description: "별도의 컨트롤러 없이 사용자의 웹캠 제스처(Hand Gesture)를 실시간으로 인식하여 캐릭터를 조작하는 3D 인터랙티브 게임입니다. 기존의 키보드/마우스 입력 방식을 탈피하여, CSS 3D와 Motion Recognition API를 활용한 몰입형 경험을 구현했습니다.",
+    features: [
+      "웹캠 기반 실시간 핸드 제스처 인식 시스템",
+      "CSS 3D Transform을 활용한 입체적 공간 구현",
+      "별도 장비 없는 몰입형 게임 플레이 경험",
+      "사용자 동작에 반응하는 실시간 피드백 루프",
+      "최적화된 모션 인식 알고리즘 적용"
+    ],
+    techStack: ["JavaScript", "CSS3", "Webcam API", "Motion Recognition"],
+    challenges: "실시간 영상 처리로 인한 브라우저 성능 저하가 주된 문제였습니다. 연산 로직을 Web Worker로 분리하고 인식 주기를 최적화하여 60FPS를 유지했습니다.",
+    results: "하드웨어 제약 없는 새로운 인터랙션 방식을 제시했으며, 창의적인 웹 기술 활용 능력을 입증했습니다.",
+    github: "https://github.com/sohee9010",
+    demo: "#"
+  },
+  2: {
+    category: "web",
+    title: "Premium Department Store",
+    subtitle: "고급형 백화점 통합 관리 플랫폼",
+    image: "images/project_2.jpg",
+    period: "2024.06 - 2024.08",
+    team: "팀 프로젝트 (4명)",
+    role: "프론트엔드 리드",
+    status: "완료",
+    description: "다양한 브랜드와 카테고리를 취급하는 고급형 백화점 쇼핑몰을 구현했습니다. 일반적인 구매 프로세스뿐만 아니라, 관리자(Admin) 페이지를 통해 상품 입점부터 재고, 회원 등급까지 관리하는 통합 웹 플랫폼을 구축했습니다.",
+    features: [
+      "브랜드 및 카테고리별 상품 큐레이션",
+      "장바구니, 결제, 주문 내역 조회 프로세스",
+      "관리자 대시보드 (입점, 재고, 매출 관리)",
+      "회원 등급제 및 포인트 시스템",
+      "반응형 웹 디자인 적용"
+    ],
+    techStack: ["React", "Node.js", "Redux", "MongoDB"],
+    challenges: "복잡한 상품 옵션과 재고 연동 로직을 처리하는 것이 까다로웠습니다. Redux를 활용한 체계적인 상태 관리로 데이터 무결성을 확보했습니다.",
+    results: "실제 커머스 운영이 가능한 수준의 완성도 높은 플랫폼을 구축했습니다.",
+    github: "https://github.com/sohee9010",
+    demo: "#"
+  },
+  3: {
+    category: "game",
+    title: "Cross-Device Rhythm Game",
+    subtitle: "스마트폰 센서 연동 크로스 디바이스 게임",
+    image: "images/project_3.png",
+    period: "2024.03 - 2024.05",
+    team: "팀 프로젝트 (3명)",
+    role: "풀스택 개발, 소켓 통신 구현",
+    status: "완료",
+    description: "스마트폰을 게임 컨트롤러로 사용하여 PC 화면에서 플레이하는 크로스 디바이스(Cross-Device) 리듬 게임입니다. 모바일의 자이로/가속도 센서(Motion Sensor) 데이터를 실시간으로 PC에 전송하는 소켓 통신(Socket.io) 기술을 구현하여, 별도의 장비 없이도 생생한 체감형 플레이가 가능하도록 개발했습니다.",
+    features: [
+      "Socket.io 기반 실시간 기기 간 통신 (PC-Mobile)",
+      "모바일 자이로/가속도 센서 데이터 정밀 제어",
+      "다양한 난이도와 비트맵 노트 시스템",
+      "지연 시간(Latency) 최소화 로직 적용"
+    ],
+    techStack: ["Socket.io", "Node.js", "Mobile Sensor API", "HTML5"],
+    challenges: "네트워크 환경에 따른 통신 지연이 게임 경험을 저해했습니다. 타임스탬프 동기화와 예측 보정 알고리즘으로 싱크 오차를 최소화했습니다.",
+    results: "웹 기술만으로 콘솔 게임과 유사한 사용자 경험을 제공하는 데 성공했습니다.",
+    github: "https://github.com/sohee9010",
+    demo: "https://sohee9010.github.io/rhythm-game-website/"
+  },
+  4: {
+    category: "mobile",
+    title: "플랜더(Plander) : Future Planning Calendar",
+    subtitle: "만다라트 기법 기반 목표 달성 앱",
+    image: "images/project_4.png",
+    period: "2023.12 - 2024.02",
+    team: "개인 프로젝트",
+    role: "안드로이드 앱 개발",
+    status: "완료",
+    description: "만다라트(Mandalart) 기법을 모바일 환경에 최적화하여 구현한 안드로이드 기반 자기계발 앱입니다. 핵심 목표를 64개의 세부 실천 계획으로 확장하는 로직을 설계하였으며, 이를 캘린더(Calendar) 일정과 유기적으로 연동하여 미래 설계(Future Planning)와 일상 관리가 동시에 가능한 통합 솔루션을 구축했습니다.",
+    features: [
+      "만다라트 기법 시각화 및 편집 UI",
+      "일정 관리 캘린더 연동 시스템",
+      "목표 달성률 추적 및 통계 제공",
+      "직관적인 Material Design UI 적용"
+    ],
+    techStack: ["Android Studio", "Kotlin", "SQLite", "Material Design"],
+    challenges: "복잡한 만다라트 데이터 구조와 캘린더 데이터의 효율적인 연동이 과제였습니다. Room Database의 관계형 설계를 통해 데이터 일관성을 유지했습니다.",
+    results: "체계적인 목표 관리를 돕는 실용적인 앱으로 완성되었습니다.",
+    github: "https://github.com/sohee9010",
+    ppt: "#",
+    imagePosition: "center 30%"
+  },
+  5: {
+    category: "mobile",
+    title: "Smart Library Manager",
+    subtitle: "데이터 시각화 기반 스마트 서재 관리 앱",
+    image: "images/project_5.png",
+    period: "2023.09 - 2023.11",
+    team: "개인 프로젝트",
+    role: "안드로이드 앱 개발",
+    status: "완료",
+    description: "카카오 도서 검색 API로 책 정보를 불러오고, 독서 상태(읽는 중/완독)를 체계적으로 기록하는 안드로이드 기반 스마트 서재 앱입니다. 단순 기록을 넘어, MPAndroidChart 라이브러리를 활용해 월별 독서량과 상태 비율을 그래프(Data Visualization)로 시각화하여 사용자의 독서 습관을 직관적으로 분석합니다.",
+    features: [
+      "카카오 도서 검색 API 연동",
+      "도서 상태 관리 (읽고 싶은/읽는 중/완독)",
+      "MPAndroidChart 활용 독서 통계 시각화",
+      "개인 독서 노트 및 평점 기록"
+    ],
+    techStack: ["Android Studio", "Kakao API", "MPAndroidChart", "Room DB"],
+    challenges: "외부 API 연동 시 비동기 처리와 데이터 캐싱이 중요했습니다. Coroutines를 활용하여 매끄러운 사용자 경험을 구현했습니다.",
+    results: "데이터 시각화를 통해 독서 동기 부여를 제공하는 완성도 높은 앱을 개발했습니다.",
+    github: "https://github.com/sohee9010",
+    report: "#",
+    imagePosition: "center 30%"
+  }
+};
+
+/* ===================================
+   Career Data & Renderer
+   =================================== */
+const careerData = {
+  timeline: [
+    {
+      date: "2025.03 - 2026.01",
+      title: "클라우드 활용 풀스택 개발 과정",
+      company: "한국정보교육원",
+      details: ["Java Spring & React 기반 웹 애플리케이션 개발", "클라우드 인프라 구축 및 배포 실습", "팀 프로젝트 리딩 및 애자일 협업 경험", "실무 중심의 풀스택 커리큘럼 이수"]
+    },
+    {
+      date: "2022.03 - 2026.02",
+      title: "컴퓨터공학과 학사",
+      company: "Daejin University",
+      details: ["전공 심화 학습: 자료구조, 알고리즘, 소프트웨어공학", "INOSIF 영상동아리 회장 (2025): 동아리 운영 및 콘텐츠 기획 총괄", "컴퓨터공학 과학생회 임원 (2022): 학과 행사 기획 및 학생 복지 증진 활동", "다양한 팀 프로젝트 참여"]
+    }
+  ],
+  certifications: [
+    {
+      name: "GTQ 1급 (GTQ Grade 1)",
+      date: "2023.05",
+      icon: 'svg:<svg viewBox="0 0 64 64" style="width:100%; height:100%;" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="12" fill="#001E36"/><path d="M15 17h11.5c5.5 0 9 3 9 7.5s-3.5 7.5-9 7.5H20v13h-5V17zm5 11h6.5c2.5 0 4-1.5 4-3.5s-1.5-3.5-4-3.5H20v7zm22 10.5v2.5c0 1.5 1 2 2.5 2s2.5-.5 2.5-2c0-1.5-1.5-2-3.5-3-3-1.5-6-3.5-6-7s2.5-6 6.5-6c3.5 0 6 2 6.5 5.5h-4.5c-.5-1.5-1-2-2-2s-2 .5-2 1.5c0 1 1.5 1.5 3 2.5 3.5 2 6.5 4 6.5 8s-3 6.5-7 6.5c-4 0-7-2.5-7.5-6h4.5z" fill="#31A8FF"/></svg>',
+      desc: "Adobe 툴 활용 및 디자이너와의 원활한 협업"
+    },
+    {
+      name: "Google AI Essentials",
+      date: "2024.01",
+      icon: "fab fa-google",
+      desc: "AI 도구를 활용한 개발 생산성 및 트렌드 학습"
+    }
+  ]
+};
+
+function renderCareer() {
+  // Timeline
+  const timelineContainer = document.getElementById('timeline-container');
+  if (timelineContainer) {
+    timelineContainer.innerHTML = careerData.timeline.map(item => `
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date"><i class="far fa-calendar-alt"></i> ${item.date}</div>
+          <h4>${item.title}</h4>
+          <div class="timeline-company">${item.company}</div>
+          <ul class="timeline-details">
+            ${item.details.map(detail => `<li>${detail}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Certifications
+  const certContainer = document.getElementById('cert-container');
+  if (certContainer) {
+    certContainer.innerHTML = careerData.certifications.map(cert => {
+      const iconHtml = cert.icon.startsWith('svg:')
+        ? cert.icon.substring(4)
+        : `<i class="${cert.icon}"></i>`;
+
+      return `
+      <div class="cert-card fade-in">
+        <div class="cert-icon">${iconHtml}</div>
+        <div class="cert-info">
+          <h4>${cert.name}</h4>
+          <p class="cert-desc">${cert.desc}</p>
+        </div>
+        <div class="cert-date">${cert.date}</div>
+      </div>
+    `}).join('');
+  }
+}
+
+
+// ===================================
+// 3D Coverflow Project Renderer
+// ===================================
+
+let currentProjectIndex = 0;
+let filteredProjectIds = [];
+let touchStartX = 0;
+let touchEndX = 0;
+
+let lastSwitchTime = 0;
+
+// View State
+let currentViewMode = 'slide'; // 'slide' or 'grid'
+
+// Filter projects based on category
+function filterProjects(category) {
+  if (category === 'all') {
+    filteredProjectIds = Object.keys(projectData);
+  } else {
+    filteredProjectIds = Object.keys(projectData).filter(id => projectData[id].category === category);
+  }
+
+  // Reset
+  currentProjectIndex = 0;
+  lastSwitchTime = Date.now();
+
+  // Render based on current view
+  if (currentViewMode === 'slide') {
+    render3DCarousel();
+  } else {
+    renderProjectGrid();
+  }
+}
+
+// Initial Render and Event Setup
+function initProjectSection() {
+  // Set initial filter
+  filterProjects('all');
+
+  // View Toggle Events (NEW)
+  const btnSlide = document.getElementById('view-slide');
+  const btnGrid = document.getElementById('view-grid');
+  const view3D = document.getElementById('project-viewport-3d');
+  const viewGrid = document.getElementById('project-viewport-grid');
+  const pagination = document.getElementById('project-pagination');
+
+  if (btnSlide && btnGrid) {
+    btnSlide.addEventListener('click', () => {
+      currentViewMode = 'slide';
+      btnSlide.classList.add('active');
+      btnGrid.classList.remove('active');
+      view3D.classList.remove('project-view-hidden');
+      viewGrid.classList.add('project-view-hidden');
+      pagination.style.display = 'flex'; // Show dots
+      render3DCarousel(); // Refresh
+    });
+
+    btnGrid.addEventListener('click', () => {
+      currentViewMode = 'grid';
+      btnGrid.classList.add('active');
+      btnSlide.classList.remove('active');
+      view3D.classList.add('project-view-hidden');
+      viewGrid.classList.remove('project-view-hidden');
+      pagination.style.display = 'none'; // Hide dots
+      renderProjectGrid(); // Render Grid
+    });
+  }
+
+  // Arrow Button Events
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  if (prevBtn) prevBtn.addEventListener('click', prevProject);
+  if (nextBtn) nextBtn.addEventListener('click', nextProject);
+
+  // Drag/Touch Events (Only relevant for 3D view, strictly speaking, but keeping attached is fine)
+  const track = document.getElementById('project-track');
+  if (track) {
+    track.addEventListener('mousedown', handleDragStart);
+    track.addEventListener('touchstart', handleTouchStart, { passive: false });
+    track.addEventListener('touchmove', handleTouchMove, { passive: false });
+    track.addEventListener('touchend', handleTouchEnd);
+  }
+}
+
+// Render Grid View
+function renderProjectGrid() {
+  const gridContainer = document.getElementById('project-viewport-grid');
+  if (!gridContainer) return;
+
+  gridContainer.innerHTML = '';
+
+  if (filteredProjectIds.length === 0) {
+    gridContainer.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#888;">No projects found.</div>';
+    return;
+  }
+
+  filteredProjectIds.forEach(id => {
+    const p = projectData[id];
+    const card = document.createElement('div');
+    card.className = 'project-card-grid fade-in';
+    card.innerHTML = `
+            <div class="grid-image-wrapper">
+                <img src="${p.image}" alt="${p.title}" loading="lazy">
+            </div>
+            <div class="grid-content">
+                <span class="grid-category">${p.category}</span>
+                <h3 class="grid-title">${p.title}</h3>
+                <p class="grid-desc">${p.description}</p>
+                <div class="grid-tags">
+                    ${p.techStack.slice(0, 3).map(t => `<span class="grid-tag">${t}</span>`).join('')}
+                    ${p.techStack.length > 3 ? `<span class="grid-tag">+${p.techStack.length - 3}</span>` : ''}
+                </div>
+            </div>
+        `;
+
+    card.addEventListener('click', () => showProjectModal(id));
+    gridContainer.appendChild(card);
+  });
+
+  // Trigger animations for new elements
+  const newItems = gridContainer.querySelectorAll('.fade-in');
+  newItems.forEach(el => observer.observe(el));
+}
+
+// ...
+
+function render3DCarousel() {
+  const container = document.getElementById('project-track');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  if (filteredProjectIds.length === 0) {
+    container.innerHTML = '<div style="color:white; font-size:1.2rem;">No projects found in this category.</div>';
+    renderPagination();
+    return;
+  }
+
+  filteredProjectIds.forEach((id, index) => {
+    const p = projectData[id];
+    const card = document.createElement('div');
+    card.className = `project-card-3d`;
+    card.dataset.index = index;
+    card.dataset.id = id;
+
+    const gradientClass = `project-gradient-${id}`;
+
+    card.innerHTML = `
+      <div class="mac-window-header">
+        <div class="window-dot dot-red"></div>
+        <div class="window-dot dot-yellow"></div>
+        <div class="window-dot dot-green"></div>
+        <div class="window-title-bar">portfolio_project_${id}.html</div>
+      </div>
+      <div class="mac-window-body">
+        <div class="project-image-placeholder ${gradientClass}" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:-1;"></div>
+        <img src="${p.image}" alt="${p.title}" onerror="this.style.opacity=0">
+      </div>
+      <div class="project-info-overlay">
+        <h3 class="project-title-3d">${p.title}</h3>
+        <p class="project-desc-3d">${p.description}</p>
+        <div style="margin-top:10px; font-size:0.8rem; color:#aaa;">Click to view details</div>
+      </div>
+    `;
+
+    // Hover to switch removed. Only Click or Buttons now.
+
+    card.addEventListener('click', (e) => {
+      if (index === currentProjectIndex) {
+        showProjectModal(id);
+      } else {
+        currentProjectIndex = index;
+        update3DCarousel();
+      }
+    });
+
+    container.appendChild(card);
+  });
+
+  renderPagination();
+  update3DCarousel();
+}
+
+function renderPagination() {
+  const paginationContainer = document.getElementById('project-pagination');
+  if (!paginationContainer) return;
+
+  paginationContainer.innerHTML = '';
+
+  if (filteredProjectIds.length <= 1) return;
+
+  filteredProjectIds.forEach((_, index) => {
+    const dot = document.createElement('div');
+    dot.className = 'page-dot';
+    if (index === currentProjectIndex) dot.classList.add('active');
+
+    dot.addEventListener('click', () => {
+      currentProjectIndex = index;
+      update3DCarousel();
+    });
+
+    paginationContainer.appendChild(dot);
+  });
+}
+
+function update3DCarousel() {
+  const cards = document.querySelectorAll('.project-card-3d');
+
+  // Radius of the carousel "cylinder"
+  const radius = 1000;
+  // Angle per card (degrees)
+  const angleStep = 40;
+
+  cards.forEach((card, index) => {
+    // Reset specific classes for Z-index or filtering if needed
+    card.className = 'project-card-3d';
+
+    // Calculate offset from center
+    const diff = index - currentProjectIndex;
+
+    // We want to limit the visible range to avoid rendering items behind the camera
+    // But let's just let them rotate out of view naturally.
+
+    // Calculate angle for this card
+    // diff = 0 -> 0 deg (center)
+    // diff = -1 -> 40 deg (left) 
+    // Wait, if we want them to form a circle around a center point BEHIND the screen:
+    // x = sin(angle) * r
+    // z = cos(angle) * r - r (so center is at 0)
+
+    // Let's use simple angle mapping
+    const theta = diff * angleStep * (Math.PI / 180); // Convert to radians
+
+    // X position: classic sin wave for arc
+    // Spread them out more if visual is too tight
+    const x = Math.sin(theta) * radius * 0.8;
+
+    // Z position: curve away from viewer
+    // Center (theta=0) -> z = 0
+    // Sides -> z < 0
+    let z = (Math.cos(theta) * radius) - radius;
+
+    // Add extra "push" back for non-active items to emphasize depth
+    // z -= Math.abs(diff) * 100;
+
+    // Rotation: active card faces forward (0).
+    // Left card (-1): positioned left, should rotate inward (face right). 
+    // In CSS rotateY: positive angles move right side back (face left). Negative angles face right.
+    // So if card is on Left (negative X), we want it to face partially Right.
+    // This defines a "concave" screen.
+    const rotateY = -diff * angleStep;
+
+    /* 
+      Interpretation of "Cylindrical":
+      Items are on the inside of a cylinder.
+      Viewer is at center.
+      Item at angle -30deg (Left) should be rotated +30deg to face viewer? 
+      Yes. So rotateY = - (theta_deg).
+      
+      If diff is -1 (Left), theta is -40deg. 
+      RotateY should be +40deg.
+      
+      So rotateY = -diff * angleStep is correct.
+    */
+
+    // Opacity/Visibility
+    const absDiff = Math.abs(diff);
+    let opacity = 1;
+    let blur = 0;
+
+    if (absDiff > 0) {
+      opacity = Math.max(0.3, 1 - (absDiff * 0.2)); // Fade out as they go side
+      blur = Math.min(10, absDiff * 2); // Blur as they go side
+
+      // Push z even further for depth perception
+      // z -= 200; 
+    }
+
+    // Apply Styles
+    card.style.transform = `translateX(${x}px) translateZ(${z}px) rotateY(${rotateY}deg)`;
+    card.style.opacity = opacity;
+    card.style.filter = `blur(${blur}px)`;
+    card.style.zIndex = 100 - absDiff; // Center is on top
+
+    // Add active class for specific high-lighting/pointer-events
+    if (diff === 0) {
+      card.classList.add('active');
+      card.style.filter = 'none'; // Ensure crisp center
+    } else {
+      card.style.pointerEvents = 'auto'; // Allow clicking side cards
+    }
+
+    // Hide items that are too far back to prevent artifacting or clutter
+    // User Request: Hide "behind behind" projects (diff >= 2)
+    if (absDiff >= 2) {
+      card.style.opacity = 0;
+      card.style.pointerEvents = 'none';
+      card.classList.remove('visible'); // Optional helper
+    } else {
+      // Ensure visible items have proper interaction
+      card.style.pointerEvents = 'auto';
+    }
+  });
+
+  // Update Pagination Dots
+  const dots = document.querySelectorAll('.page-dot');
+  dots.forEach((dot, index) => {
+    if (index === currentProjectIndex) dot.classList.add('active');
+    else dot.classList.remove('active');
+  });
+
+  // Update Arrow States
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  if (prevBtn) prevBtn.style.opacity = currentProjectIndex === 0 ? '0.3' : '1';
+  if (nextBtn) nextBtn.style.opacity = currentProjectIndex === filteredProjectIds.length - 1 ? '0.3' : '1';
+}
+
+// Interaction Handlers
+let isThrottled = false;
+function handleWheel(e) {
+  // Check if scrolling primarily horizontal or intent is horizontal switch
+  if (Math.abs(e.deltaY) > 10 || Math.abs(e.deltaX) > 10) {
+    // If we are over the track, we want to control the carousel
+    e.preventDefault();
+
+    if (isThrottled) return;
+
+    if (e.deltaY > 0 || e.deltaX > 0) {
+      nextProject();
+    } else {
+      prevProject();
+    }
+
+    isThrottled = true;
+    setTimeout(() => { isThrottled = false; }, 400); // 400ms throttle
+  }
+}
+
+function nextProject() {
+  if (currentProjectIndex < filteredProjectIds.length - 1) {
+    currentProjectIndex++;
+    update3DCarousel();
+  }
+}
+
+function prevProject() {
+  if (currentProjectIndex > 0) {
+    currentProjectIndex--;
+    update3DCarousel();
+  }
+}
+
+// Drag Support
+let isDragging = false;
+let startX = 0;
+
+function handleDragStart(e) {
+  isDragging = true;
+  startX = e.pageX;
+  document.body.style.cursor = 'grabbing';
+}
+
+document.addEventListener('mouseup', () => {
+  if (isDragging) {
+    isDragging = false;
+    document.body.style.cursor = '';
+  }
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const currentX = e.pageX;
+  const diff = startX - currentX;
+
+  // Reduced threshold for "snappy" feeling
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) nextProject();
+    else prevProject();
+    isDragging = false;
+    document.body.style.cursor = '';
+  }
+});
+
+// Touch Support
+function handleTouchStart(e) {
+  touchStartX = e.changedTouches[0].screenX;
+}
+
+function handleTouchMove(e) {
+  // Prevent scrolling page while trying to swipe gallery
+  if (e.target.closest('#project-track')) {
+    e.preventDefault();
+  }
+}
+
+function handleTouchEnd(e) {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+}
+
+function handleSwipe() {
+  const diff = touchStartX - touchEndX;
+  if (Math.abs(diff) > 40) { // Sensitive swipe
+    if (diff > 0) nextProject();
+    else prevProject();
+  }
+}
+
+
+// Initialize Sections
+document.addEventListener('DOMContentLoaded', () => {
+  initProjectSection();
+  renderCareer();
+  setTimeout(startTypingLoop, 500);
+
+  // ... rest of init
+  const newFadeElements = document.querySelectorAll('.timeline-item.fade-in, .cert-card.fade-in');
+  // Check if observer is defined (usually global)
+  if (typeof observer !== 'undefined') {
+    newFadeElements.forEach((el, index) => {
+      observer.observe(el);
+    });
+  }
+});
+
+
+// ===================================
+// Project Modal System
+// ===================================
+function showProjectModal(projectId) {
+  const project = projectData[projectId];
+  if (!project) return;
+
+  const modal = document.getElementById('projectModal');
+  const modalContent = document.getElementById('modalContent');
+
+  // 모달 콘텐츠 생성
+  modalContent.innerHTML = `
+    <div class="modal-header">
+      <h2 class="modal-title">${project.title}</h2>
+      <p class="modal-subtitle">${project.subtitle}</p>
+      <div class="modal-meta">
+        <span class="modal-meta-item">📅 ${project.period}</span>
+        <span class="modal-meta-item">👥 ${project.team}</span>
+        <span class="modal-meta-item">👤 ${project.role}</span>
+        <span class="modal-meta-item">✅ ${project.status}</span>
+      </div>
+    </div>
+
+    ${project.image ? `
+      <div class="modal-project-image">
+        <img src="${project.image}" alt="${project.title}" style="object-position: ${project.imagePosition || 'top'};">
+      </div>
+    ` : ''}
+
+    <div class="modal-section">
+      <h3>프로젝트 개요</h3>
+      <p>${project.description}</p>
+    </div>
+
+    <div class="modal-section">
+      <h3>주요 기능</h3>
+      <ul>
+        ${project.features.map(feature => `<li>${feature}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <h3>기술 스택</h3>
+      <div class="modal-tech-stack">
+        ${project.techStack.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <h3>도전 과제</h3>
+      <p>${project.challenges}</p>
+    </div>
+
+    <div class="modal-section">
+      <h3>성과</h3>
+      <p>${project.results}</p>
+    </div>
+
+    <div class="modal-links">
+      <a href="${project.github}" target="_blank" class="modal-link-btn modal-link-primary">
+        GitHub 보기 →
+      </a>
+      ${project.demo ? `
+        <a href="${project.demo}" target="_blank" class="modal-link-btn modal-link-secondary">
+          라이브 데모 →
+        </a>
+      ` : ''}
+      ${project.ppt ? `
+        <a href="${project.ppt}" target="_blank" class="modal-link-btn modal-link-secondary">
+          <i class="fas fa-file-powerpoint"></i> PPT 보기 →
+        </a>
+      ` : ''}
+      ${project.report ? `
+        <a href="${project.report}" target="_blank" class="modal-link-btn modal-link-secondary">
+          <i class="fas fa-file-alt"></i> 보고서 보기 →
+        </a>
+      ` : ''}
+    </div>
+  `;
+
+  // 모달 표시
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// 모달 닫기 함수
+function closeModal() {
+  const modal = document.getElementById('projectModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+// 닫기 버튼 이벤트
+const modalCloseBtn = document.querySelector('.modal-close');
+if (modalCloseBtn) {
+  modalCloseBtn.addEventListener('click', closeModal);
+}
+
+// 모달 외부 클릭 시 닫기
+const projectModal = document.getElementById('projectModal');
+if (projectModal) {
+  projectModal.addEventListener('click', function (e) {
+    if (e.target === this) {
+      closeModal();
+    }
+  });
+}
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    closeModal();
+  }
+});
+
+// ===================================
+// Email Copy to Clipboard & Toast Notification
+// ===================================
+function showToast(message) {
+  let toast = document.querySelector('.toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'toast';
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add('show');
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2000);
+}
+
+function copyEmail() {
+  const email = '1545thgml@naver.com';
+  navigator.clipboard.writeText(email).then(() => {
+    // Show "Copied!" text feedback
+    const textElement = document.querySelector('.email-link .connect-text');
+    if (textElement) {
+      const originalText = textElement.textContent;
+      textElement.textContent = 'Copied!';
+      setTimeout(() => {
+        textElement.textContent = originalText;
+      }, 2000);
+    }
+    showToast('Email copied to clipboard!');
+  }).catch(err => {
+    alert('Email copied: ' + email);
+  });
+}
+
+function copyContactEmail(event) {
+  event.preventDefault();
+  const email = '1545thgml@naver.com';
+  const link = event.currentTarget;
+
+  navigator.clipboard.writeText(email).then(() => {
+    const originalText = link.textContent.trim();
+    link.textContent = 'Copied!';
+    showToast('Email copied to clipboard!');
+
+    setTimeout(() => {
+      link.textContent = originalText;
+    }, 2000);
+  }).catch(err => {
+    alert('Email copied: ' + email);
+  });
+}
+
+
+// Particle system removed as per request
+// ===================================
+// Initialization
+// ===================================
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("Initializing Portfolio...");
+
+  // Render Career Section (Timeline & Certifications)
+  renderCareer();
+
+  // Initialize Project Carousel
+  initProjectSection();
+
+  // Initialize any other interactive elements if needed
+});

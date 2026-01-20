@@ -1,0 +1,178 @@
+/* ===================================
+   CSS Custom Properties (Design Tokens)
+   =================================== */
+:root {
+    /* Colors - Clean White Theme */
+    --color-bg-main: #FFFFFF;
+    --color-bg-secondary: #FAFAFA;
+    --color-text-primary: #1D1D1F;
+    --color-text-secondary: #86868B;
+    --color-text-muted: #6E6E73;
+
+    /* Brand Colors */
+    --color-primary: #0071E3;
+    --color-secondary: #5E5CE6;
+    --color-accent: #0071E3;
+
+    /* Gradients */
+    --gradient-main: linear-gradient(135deg, #0071E3 0%, #5E5CE6 100%);
+    --gradient-glow: linear-gradient(135deg, #0071E3 0%, #40C4FF 100%);
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --backdrop-blur: 20px;
+
+    /* Typography */
+    --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-body: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --space-2xl: 5rem;
+
+    /* Layout */
+    --max-width: 1080px;
+    --header-height: 70px;
+    --border-radius-lg: 24px;
+    --border-radius-md: 16px;
+    --border-radius-sm: 12px;
+
+    /* Transitions */
+    --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+    /* Cursor SVG Data URIs - White with Subtle Outline */
+    --cursor-default: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="9" fill="none" stroke="black" stroke-width="4" opacity="0.1"/><circle cx="16" cy="16" r="9" fill="none" stroke="white" stroke-width="2"/></svg>') 16 16, auto;
+    --cursor-pointer: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="9" fill="black" opacity="0.1"/><circle cx="16" cy="16" r="7" fill="white"/></svg>') 16 16, pointer;
+}
+
+/* Custom Cursor REMOVED by user request */
+/* System default cursor will be used */
+
+/* Hide the JS custom cursor elements to prevent confusion */
+.custom-cursor,
+.custom-cursor-follower {
+    display: none !important;
+}
+
+/* ===================================
+   Reset & Base Styles
+   =================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg-main);
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    height: 100%;
+}
+
+/* Ensure footer doesn't break flow, or make it snap too */
+footer {}
+
+.bg-mesh {
+    display: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    color: var(--color-text-primary);
+    line-height: 1.1;
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: 4.5rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: 0.2s ease;
+}
+
+.text-gradient {
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ===================================
+   Interactive Animations
+   =================================== */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Add floating animation to hero elements */
+.hero-greeting {
+    animation: float 3s ease-in-out infinite;
+    display: inline-block;
+}
+
+/* Parallax scroll effect */
+.parallax {
+    transition: transform 0.5s ease-out;
+}

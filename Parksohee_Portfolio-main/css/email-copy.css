@@ -1,0 +1,13 @@
+/* Email button styling */
+.email-link {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+}
+
+.email-link:active {
+    transform: scale(0.98);
+}
