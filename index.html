@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="컴퓨터공학과 4학년 학생의 포트폴리오 - 프로젝트, 기술 스택, 경력을 소개합니다.">
+  <meta name="keywords" content="포트폴리오, 컴퓨터공학, 웹 개발, 프론트엔드">
+  <meta name="author" content="Your Name">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Portfolio - Your Name">
+  <meta property="og:description" content="컴퓨터공학과 4학년 학생의 포트폴리오">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <title>Portfolio - Park Sohee</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/contact-enhanced.css">
+  <link rel="stylesheet" href="css/project-grid.css">
+  <link rel="stylesheet" href="css/opening.css">
+  <link rel="stylesheet" href="css/hero-fluid.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+</head>
+
+<div id="opening-screen" class="opening-overlay">
+  <!-- WebGL Fluid Canvas -->
+  <canvas id="fluid-canvas"></canvas>
+
+  <!-- Three.js (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- GSAP for smooth animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/fflate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- 3D Glass Opening Screen -->
+  <!-- 3D Canvas Container -->
+  <div id="canvas-3d-container"></div>
+
+  <div class="opening-scene-overlay">
+    <!-- Removed old text, now using search bar -->
+  </div>
+
+  <!-- New Search Bar UI -->
+  <div class="search-container">
+    <div class="search-bar">
+      <i class="fas fa-search search-icon"></i>
+      <div class="fake-input">
+        Park Sohee's Portfolio?
+        <span class="fake-cursor"></span>
+      </div>
+    </div>
+    <div class="search-hint">Press <strong>ENTER</strong> to View Project</div>
+  </div>
+
+  <div class="slide-indicator" style="display:none;"></div>
+</div>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="nav-content">
+    <a href="#" class="nav-logo">Portfolio</a>
+    <ul class="nav-menu">
+      <li><a href="#profile" class="nav-link">About</a></li>
+      <li><a href="#projects" class="nav-link">Projects</a></li>
+      <li><a href="#career" class="nav-link">Career</a></li>
+      <li><a href="#contact" class="nav-link">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <!-- WebGL Fluid Canvas for Background -->
+  <canvas id="fluid-hero-canvas"></canvas>
+  <!-- Full Screen 3D Visual Background -->
+  <div class="sphere-wrapper" id="hero-visual-bg">
+    <!-- 3D Canvas injected here -->
+  </div>
+  <div class="click-ripple-hint" id="interaction-hint">
+    <div class="ripple-ring ripple-ring-1"></div>
+    <div class="ripple-ring ripple-ring-2"></div>
+    <div class="ripple-ring ripple-ring-3"></div>
+    <div class="click-label">Click!</div>
+  </div>
+
+  <div class="hero-split-container">
+    <!-- Left Side (Content) -->
+    <div class="hero-left">
+      <div class="hero-content">
+        <span class="hero-greeting"><span class="status-dot"></span> 🚀 Sohee's Portfolio v.2026</span>
+        <h1 class="hero-title">
+          From <span class="text-gradient">zero</span> to one.
+        </h1>
+        <p class="hero-description" style="margin-top: 10px; font-size: 1.5rem; font-weight: 700;">
+          <span style="color:#444;">I am a</span>
+          <span id="typewriter-text" style="color:#7F52FF; margin-left: 6px; margin-right: 1px;"></span><span
+            class="typewriter-cursor" style="color:#7F52FF; font-weight: 400; margin-right: 6px;">|</span>
+          <span style="color:#444;">Developer</span>
+        </p>
+      </div>
+    </div>
+    <!-- Right Side (Empty now, but kept for layout spacing if needed) -->
+    <!-- Right Side (Empty now, but kept for layout spacing if needed) -->
+    <div class="hero-right">
+    </div>
+  </div>
+
+</section>
+
+<!-- Profile Section -->
+<section class="section" id="profile" style="padding-top: 100px;">
+  <div class="container">
+    <!-- Refactored About Me Structure -->
+    <div class="about-layout">
+      <!-- Left: Magnetic Image -->
+      <div class="about-visual">
+        <div class="magnetic-wrap">
+          <div class="magnetic-area"></div>
+          <img src="images/박소희.png" alt="Sohee Park" class="about-img">
+        </div>
+      </div>
+
+      <!-- Right: Tabbed Content Panel -->
+      <div class="about-right-panel">
+
+        <!-- Tab Controls -->
+        <div class="identity-tabs">
+          <button class="identity-tab active" onclick="switchIdentityTab('intro')">Introduce</button>
+          <button class="identity-tab" onclick="switchIdentityTab('skills')">Skills</button>
+          <button class="identity-tab" onclick="switchIdentityTab('certs')">Awards</button>
+        </div>
+
+        <!-- Tab 1: Intro Content -->
+        <div id="tab-intro" class="identity-content active reveal-text">
+          <h2 class="about-title">
+            Simply<br>
+            <span class="text-gradient">Problem Solver.</span>
+          </h2>
+
+          <div class="about-bio">
+            <p>
+              단순한 기능 구현을 넘어, 코드에 감각을 더해<br>
+              <strong>사용자 경험(UX)</strong>을 완성하는 개발자 박소희입니다.
+            </p>
+            <p>
+              탄탄한 <strong>서버 설계</strong>부터 <strong>주도적인 팀 프로젝트</strong> 경험까지,<br>
+              개발과 디자인의 언어를 모두 이해하는 <strong>올라운더</strong>로서<br>
+              프로젝트의 완성도를 높입니다.
+            </p>
+          </div>
+
+          <!-- Minimal Stats/Info -->
+          <div class="about-stats">
+            <div class="stat-item">
+              <span class="stat-num">4+</span>
+              <span class="stat-label">Years Exp.</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">5+</span>
+              <span class="stat-label">Projects</span>
+            </div>
+          </div>
+
+          <!-- Info Cards -->
+          <div class="intro-info-grid">
+            <div class="intro-info-card">
+              <i class="fas fa-graduation-cap"></i>
+              <div>
+                <strong>대진대학교</strong>
+                <span>컴퓨터공학과 4학년</span>
+              </div>
+            </div>
+            <div class="intro-info-card">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <strong>Location</strong>
+                <span>경기도, 대한민국</span>
+              </div>
+            </div>
+            <div class="intro-info-card">
+              <i class="fas fa-heart"></i>
+              <div>
+                <strong>Interest</strong>
+                <span>Interactive Web, 3D, UX</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Skills Content -->
+        <!-- Tab 2: Skills Content -->
+        <div id="tab-skills" class="identity-content">
+          <!-- Highlight Banner -->
+          <div class="skill-highlight-banner">
+            <div class="highlight-text">
+              <strong>Full-Stack & Interactive Web</strong>
+              프론트엔드부터 백엔드, 3D 인터랙티브까지 폭넓은 기술 스택을 보유하고 있습니다.
+            </div>
+            <div class="highlight-badges">
+              <span>5+ Projects</span>
+              <span>4+ Years</span>
+            </div>
+          </div>
+
+          <div class="tech-stack-grid">
+            <div class="tech-card">
+              <div class="tech-card-header">
+                <div class="tech-icon"><span style="font-size: 1.2rem;">🖥️</span></div>
+                <h3>Frontend</h3>
+              </div>
+              <div class="tech-tags">
+                <span class="tech-tag"><i class="fab fa-react" style="color:#61DAFB"></i> React</span>
+                <span class="tech-tag"><i class="fas fa-layer-group" style="color:#000000"></i> Next.js</span>
+                <span class="tech-tag"><i class="fab fa-js" style="color:#F7DF1E"></i> TypeScript</span>
+                <span class="tech-tag"><i class="fas fa-cube" style="color:#000000"></i> Three.js</span>
+                <span class="tech-tag"><i class="fab fa-html5" style="color:#E34F26"></i> HTML/CSS</span>
+              </div>
+              <p class="tech-description">컴포넌트 설계 및 3D 인터랙티브 웹 구현</p>
+            </div>
+
+            <div class="tech-card">
+              <div class="tech-card-header">
+                <div class="tech-icon"><span style="font-size: 1.2rem;">📱</span></div>
+                <h3>Mobile</h3>
+              </div>
+              <div class="tech-tags">
+                <span class="tech-tag"><i class="fab fa-android" style="color:#3DDC84"></i> Kotlin</span>
+                <span class="tech-tag"><i class="fab fa-java" style="color:#007396"></i> Java</span>
+                <span class="tech-tag"><i class="fas fa-database" style="color:#4479A1"></i> SQLite</span>
+              </div>
+              <p class="tech-description">Android 네이티브 앱 개발 및 생명주기 최적화</p>
+            </div>
+
+            <div class="tech-card">
+              <div class="tech-card-header">
+                <div class="tech-icon"><span style="font-size: 1.2rem;">🚀</span></div>
+                <h3>Backend & Tools</h3>
+              </div>
+              <div class="tech-tags">
+                <span class="tech-tag"><i class="fab fa-node-js" style="color:#339933"></i> Node.js</span>
+                <span class="tech-tag"><i class="fab fa-python" style="color:#3776AB"></i> Python</span>
+                <span class="tech-tag"><i class="fas fa-fire" style="color:#FFCA28"></i> Firebase</span>
+                <span class="tech-tag"><i class="fab fa-git-alt" style="color:#F05032"></i> Git</span>
+                <span class="tech-tag"><i class="fab fa-figma" style="color:#F24E1E"></i> Figma</span>
+                <span class="tech-tag"><i class="fas fa-book" style="color:#000"></i> Notion</span>
+              </div>
+              <p class="tech-description">REST API 설계, 데이터베이스 구조화 및 협업 툴 활용</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Certifications Content -->
+        <div id="tab-certs" class="identity-content">
+          <h2 class="about-title" style="margin-bottom: 28px;">
+            <span class="text-gradient">Certifications</span> & Awards
+          </h2>
+          <div class="cert-tab-list">
+            <div class="cert-tab-card">
+              <div class="cert-tab-icon">
+                <span class="skill-cert-badge" style="width:52px;height:52px;font-size:1.1rem;">Ps</span>
+              </div>
+              <div class="cert-tab-body">
+                <h4>GTQ 1급 (GTQ Grade 1)</h4>
+                <p>Adobe 툴 활용 및 디자이너와의 원활한 협업</p>
+                <span class="cert-tab-date">2023.05</span>
+              </div>
+            </div>
+            <div class="cert-tab-card">
+              <div class="cert-tab-icon">
+                <span class="skill-cert-badge"
+                  style="width:52px;height:52px;font-size:1rem;background:linear-gradient(135deg,#4285F4,#34A853);color:#fff;">G</span>
+              </div>
+              <div class="cert-tab-body">
+                <h4>Google AI Essentials</h4>
+                <p>AI 도구를 활용한 개발 생산성 및 트렌드 학습</p>
+                <span class="cert-tab-date">2024.01</span>
+              </div>
+            </div>
+            <div class="cert-tab-card">
+              <div class="cert-tab-icon">
+                <span class="skill-cert-badge"
+                  style="width:52px;height:52px;font-size:1.2rem;background:linear-gradient(135deg,#FFD700,#FFA500);color:#fff;">🏆</span>
+              </div>
+              <div class="cert-tab-body">
+                <h4>KDT 성과발표회 장려상</h4>
+                <p>STEP UP : 스마트폰 센서 연동 크로스 디바이스 리듬 게임</p>
+                <span class="cert-tab-date">2024</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Projects Section -->
+<section class="section" id="projects">
+  <div class="container project-container-3d">
+    <div class="section-header">
+      <h2>🚀 Projects</h2>
+      <p>Scroll or Drag to explore my work.</p>
+    </div>
+
+    <!-- View Toggle (Restored to Top for better visibility) -->
+    <div class="project-controls">
+      <div class="view-toggle">
+        <button id="view-slide" class="view-btn active" title="Slide View">
+          <i class="fas fa-layer-group"></i>
+        </button>
+        <button id="view-grid" class="view-btn" title="Grid View">
+          <i class="fas fa-th-large"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3D Coverflow Viewport -->
+    <div class="project-viewport" id="project-viewport-3d">
+      <button class="nav-arrow nav-prev" id="prevBtn" aria-label="Previous Project">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+
+      <div class="project-flow-track" id="project-track">
+        <!-- Carousel projects will be injected here -->
+      </div>
+
+      <button class="nav-arrow nav-next" id="nextBtn" aria-label="Next Project">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- Pagination Dots (Centered at bottom) -->
+    <div class="project-pagination" id="project-pagination"></div>
+
+    <!-- Grid View Container (New Design) -->
+    <div class="project-grid-view project-view-hidden" id="project-viewport-grid">
+      <!-- Grid items injected by JS -->
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Career Section -->
+<section class="section" id="career">
+  <div class="container">
+    <div class="section-header">
+      <h2>🎓 Education</h2>
+    </div>
+
+    <div class="career-wrapper">
+      <!-- Timeline Column -->
+      <div class="timeline-section" style="width: 100%; max-width: 800px; margin: 0 auto;">
+        <h3 class="timeline-heading">Timeline</h3>
+        <div class="timeline" id="timeline-container">
+          <!-- Timeline items will be dynamically inserted here -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Contact Section (Enhanced Design) -->
+<section class="section contact-section-enhanced" id="contact">
+  <!-- Aurora Orbs -->
+  <div class="aurora-orb orb-1"></div>
+  <div class="aurora-orb orb-2"></div>
+  <div class="aurora-orb orb-3"></div>
+
+  <div class="container">
+    <div class="section-header">
+      <h2>Let's Work Together</h2>
+      <p style="color: #666; margin-top: 10px;">새로운 프로젝트나 협업 제안은 언제나 환영합니다</p>
+    </div>
+
+    <!-- Contact Form & Info Grid -->
+    <div class="contact-grid">
+      <!-- Left: Contact Form -->
+      <div class="contact-form-wrapper fade-in">
+        <h3 class="form-title">Send a Message</h3>
+        <form class="contact-form" id="contactForm" action="https://formspree.io/f/mnjjaydz" method="POST">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="_replyto" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Your message..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-gradient-purple btn-full">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Right: Contact Info & Social -->
+      <div class="contact-info-wrapper fade-in">
+        <h3 class="form-title">Contact Info</h3>
+
+        <!-- Email Badge -->
+        <div class="email-glass-badge-v2" onclick="copyContactEmail(event)">
+          <i class="fas fa-envelope email-icon-left"></i>
+          <span class="email-text">1545thgml@naver.com</span>
+          <i class="far fa-copy email-icon-right"></i>
+        </div>
+
+        <!-- Download Resume -->
+        <a href="files/박소희_이력서(웹).hwp" download="박소희_이력서.hwp" class="btn btn-outline-purple btn-full">
+          <i class="fas fa-download"></i> 이력서 다운로드
+        </a>
+
+        <!-- Social Links -->
+        <div class="social-links-section">
+          <h4 class="social-title">Connect with me</h4>
+          <div class="social-links-grid">
+            <a href="https://github.com/sohee9010" target="_blank" class="social-link" title="GitHub">
+              <i class="fab fa-github"></i>
+              <span>GitHub</span>
+            </a>
+            <a href="https://www.instagram.com/sohee_910/?igsh=dDAxZWVtZzhxenR3&utm_source=qr#" target="_blank"
+              class="social-link" title="Instagram">
+              <i class="fab fa-instagram"></i>
+              <span>Instagram</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="contact-footer">
+      <p>&copy; 2026 Park Sohee. All rights reserved.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Project Detail Modal -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal-container">
+    <button class="modal-close" aria-label="Close modal">✕</button>
+    <div class="modal-content" id="modalContent">
+      <!-- Content will be dynamically inserted -->
+    </div>
+  </div>
+</div>
+
+<!-- Custom Cursor Elements REMOVED -->
+
+<!-- JavaScript -->
+<!-- Dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+<!-- Fluid & Misc -->
+<script src="js/fluid-effect.js"></script>
+<script src="js/fluid.js"></script>
+<!-- <script src="js/hero-fluid.js"></script> -->
+
+<!-- 3D & Polish -->
+<script src="js/global-polish.js"></script>
+<script src="js/opening-3d.js"></script>
+<!-- <script src="js/quantum-rig.js"></script> -->
+<script src="js/liquid-metal-sphere.js"></script>
+<script src="script.js?v=final_fix"></script>
+</body>
+
+</html>

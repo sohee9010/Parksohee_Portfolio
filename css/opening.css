@@ -1,0 +1,421 @@
+/* WebGL Fluid Canvas */
+#fluid-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: auto;
+    background: #FFFFFF;
+}
+
+/* 3D Glass Opening Screen */
+.opening-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #dceeff 0%, #e0c3fc 100%);
+    /* Soft gradient matching user req */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.opening-overlay.dismissed {
+    transform: translateY(-100%);
+    transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+    pointer-events: none;
+}
+
+.opening-overlay.resetting {
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Background Blobs (Canvas) */
+.opening-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* Noise Texture for Realism */
+.opening-bg::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.05;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.blob {
+    position: absolute;
+    filter: blur(80px);
+    opacity: 0.6;
+    animation: floatBlob 10s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.blob-1 {
+    top: -10%;
+    right: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, rgba(127, 82, 255, 0.4) 0%, rgba(127, 82, 255, 0) 70%);
+}
+
+.blob-2 {
+    bottom: -10%;
+    left: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0) 70%);
+    animation-delay: -5s;
+}
+
+/* 3D Scene Container */
+.opening-scene {
+    position: relative;
+    z-index: 10;
+    perspective: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 60px;
+}
+
+/* 3D Canvas Container */
+#canvas-3d-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Full screen */
+    z-index: 1;
+    /* Below text overlay */
+}
+
+.opening-scene-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    pointer-events: none;
+    /* Let clicks pass through to 3D canvas */
+    text-align: center;
+    width: 100%;
+}
+
+.intro-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    pointer-events: none;
+    z-index: 0;
+    /* Behind 3D canvas (which is z-index 1) */
+}
+
+.intro-bg-text span {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12vw;
+    font-weight: 900;
+    line-height: 0.9;
+    color: rgba(127, 82, 255, 0.08);
+    /* Very faint purple */
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+}
+
+/* Ensure 3D canvas is above text */
+#canvas-3d-container {
+    z-index: 10;
+}
+
+.opening-scene-overlay {
+    z-index: 0;
+    /* Move overlay container down */
+}
+
+/* Glass Typography Container */
+.glass-typography-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 10;
+    mix-blend-mode: overlay;
+    /* Blends with background for glass feel */
+}
+
+/* Big Glass Text */
+.glass-text {
+    font-family: 'Outfit', 'Poppins', sans-serif;
+    font-size: 15vw;
+    font-weight: 900;
+    line-height: 1;
+    margin: 0;
+    letter-spacing: -0.02em;
+
+    /* Make text fill semi-transparent white/purple to stand out */
+    color: rgba(255, 255, 255, 0.1);
+
+    /* Stronger, Tinted Glass Stroke */
+    -webkit-text-stroke: 2px rgba(127, 82, 255, 0.4);
+
+    /* Moving Shine Gradient */
+    background: linear-gradient(110deg,
+            rgba(255, 255, 255, 0) 30%,
+            rgba(255, 255, 255, 0.8) 50%,
+            rgba(255, 255, 255, 0) 70%);
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    /* Deep Glass Shadow */
+    filter: drop-shadow(0 10px 20px rgba(127, 82, 255, 0.3));
+
+    position: relative;
+    user-select: none;
+    animation:
+        textFloat 6s ease-in-out infinite,
+        shineMove 3.5s linear infinite;
+    /* Shine animation */
+    /* Use CSS variables for mouse interaction if set by JS */
+    --mouse-x: 0.5;
+    --mouse-y: 0.5;
+
+    /* Dynamic Shadow based on mouse */
+    filter: drop-shadow(calc((var(--mouse-x) - 0.5) * -30px) calc((var(--mouse-y) - 0.5) * -30px) 20px rgba(127, 82, 255, 0.3));
+
+    transition: filter 0.1s ease-out;
+}
+
+/* Shine Animation Keyframes */
+@keyframes shineMove {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* UI/UX Design Accents (Smart Guides Look) */
+.ui-accents {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    height: 40vh;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0.6;
+}
+
+.guide-line {
+    position: absolute;
+    background: rgba(127, 82, 255, 0.3);
+}
+
+.guide-line.vertical {
+    top: -20%;
+    bottom: -20%;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(127, 82, 255, 0.5), transparent);
+}
+
+.guide-line.horizontal {
+    left: -10%;
+    right: -10%;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(127, 82, 255, 0.5), transparent);
+}
+
+.marker {
+    position: absolute;
+    color: rgba(127, 82, 255, 0.6);
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.marker.top-left {
+    top: 0;
+    left: 0;
+}
+
+.marker.top-right {
+    top: 0;
+    right: 0;
+}
+
+.marker.bottom-left {
+    bottom: 0;
+    left: 0;
+}
+
+.marker.bottom-right {
+    bottom: 0;
+    right: 0;
+}
+
+.dimension-label {
+    position: absolute;
+    top: -20px;
+    right: 0;
+    font-family: 'Consolas', monospace;
+    font-size: 0.8rem;
+    color: rgba(127, 82, 255, 0.8);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+}
+
+/* Search Bar UI Container */
+.search-container {
+    position: absolute;
+    top: 20%;
+    /* Positioned above center */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 600px;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    pointer-events: none;
+    /* Let clicks pass to 3D behind if needed, or set auto if interactive */
+}
+
+/* Glass Search Bar */
+.search-bar {
+    width: 100%;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.05),
+        0 0 0 1px rgba(255, 255, 255, 1),
+        0 10px 40px rgba(127, 82, 255, 0.15);
+    /* Purple tint glow */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    backdrop-filter: blur(10px);
+    transform: scale(0.9);
+    opacity: 0;
+    animation: searchAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
+}
+
+/* Search Icon */
+.search-icon {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+/* Fake Input Text */
+.fake-input {
+    flex: 1;
+    font-family: 'Inter', 'Noto Sans KR', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Blinking Cursor */
+.fake-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2rem;
+    background-color: #7F52FF;
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+}
+
+/* Search Hint below */
+.search-hint {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 1.2s forwards;
+}
+
+/* Animations */
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes searchAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Adjust 3D Layer Z-index to be below search but visible */
+#canvas-3d-container {
+    z-index: 10;
+}
+
+/* Hide old text elements if present */
+.opening-scene-overlay,
+.slide-indicator {
+    display: none !important;
+}

@@ -1,0 +1,572 @@
+/* ===================================
+   Hero Section (Bold Design v4)
+   =================================== */
+.hero {
+    min-height: 100vh;
+    margin-bottom: 120px;
+    display: flex;
+    position: relative;
+    overflow: visible;
+    background: #FFFFFF;
+    /* Clean background to let elements pop */
+}
+
+/* Abstract Background Blob */
+.hero::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: linear-gradient(135deg, rgba(127, 82, 255, 0.15), rgba(0, 113, 227, 0.15));
+    border-radius: 50%;
+    filter: blur(80px);
+    top: -100px;
+    left: -100px;
+    z-index: 0;
+    animation: float-blob 20s ease-in-out infinite alternate;
+}
+
+@keyframes float-blob {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(50px, 50px) scale(1.1);
+    }
+}
+
+/* Animations */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scroll-wheel {
+    0% {
+        top: 6px;
+        opacity: 1;
+        height: 8px;
+    }
+
+    100% {
+        top: 24px;
+        opacity: 0;
+        height: 4px;
+    }
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+#fluid-hero-canvas {
+    display: none !important;
+    /* Hide old fluid background to show new 3D visual */
+}
+
+/* Hero Split Container - Now mostly for text alignment */
+.hero-split-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding-top: 0;
+    align-items: center;
+    /* Vertically Center */
+    position: relative;
+    z-index: 10;
+    /* Text above visual */
+    pointer-events: none;
+    /* Let clicks pass through to visual */
+}
+
+/* Re-enable pointer events for text/buttons */
+.hero-content {
+    pointer-events: auto;
+}
+
+/* Hero Left - Bold & Direct */
+.hero-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 120px 0 0 8%;
+    /* Increased top padding to lower text */
+    height: 100%;
+    /* Ensure full height for centering */
+    z-index: 10;
+}
+
+.hero-content {
+    text-align: left;
+    width: 100%;
+    max-width: none;
+    background: transparent;
+    padding: 20px 0;
+    /* Add padding to prevent clipping */
+    box-shadow: none;
+    border: none;
+
+    /* Animation trigger */
+    opacity: 0;
+    transform: translateY(40px);
+}
+
+.hero-active .hero-content {
+    animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Clean Badge - Hidden */
+.hero-greeting {
+    display: none !important;
+}
+
+/* Massive Typography */
+/* Massive Typography */
+.hero-title {
+    font-size: 8.5rem;
+    /* Massive Scale */
+    text-align: left;
+    line-height: 1.1;
+    /* Relaxed from 0.9 to prevent clipping */
+    margin-bottom: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    /* Tighter tracking */
+    color: #000;
+    position: relative;
+    z-index: 5;
+    padding-right: 20px;
+    /* Safety padding */
+}
+
+/* Enhanced Gradient Text */
+.text-gradient {
+    background: linear-gradient(120deg, #0071E3, #7F52FF, #FF2D55);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-flow 6s ease infinite;
+    display: inline-block;
+    padding-right: 0.1em;
+    /* Prevent 'O' clipping */
+    padding-bottom: 0.05em;
+    /* Prevent bottom clipping */
+}
+
+@keyframes gradient-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.hero-description {
+    font-size: 1.8rem;
+    text-align: left;
+    max-width: 700px;
+    margin: 0 0 3rem;
+    color: #444;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+}
+
+/* Buttons */
+.hero-cta {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: flex-start;
+    margin-top: 2rem;
+}
+
+.hero-cta .btn {
+    padding: 1.2rem 3rem;
+    font-size: 1.15rem;
+    border-radius: 8px;
+    /* Sharper corners */
+    font-weight: 700;
+}
+
+/* Primary Button - Bold */
+.hero-cta .btn-primary {
+    background: #000;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: none;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hero-cta .btn-primary:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* Secondary Button - Minimal */
+.hero-cta .btn-secondary {
+    background: transparent;
+    border: 2px solid #000;
+    color: #000;
+    box-shadow: none;
+}
+
+.hero-cta .btn-secondary:hover {
+    background: #000;
+    color: #fff;
+    transform: translateY(-5px);
+}
+
+/* Right side of the hero section */
+.hero-right {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    z-index: 1;
+}
+
+/* Liquid Metal Sphere Container - FULL SCREEN MOD */
+.sphere-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    /* Above background, below text */
+    cursor: pointer;
+    overflow: hidden;
+    /* Prevent sharp bottom cutoff */
+    -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+}
+
+.sphere-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+    outline: none;
+}
+
+/* Scroll Down Indicator */
+.scroll-down-container {
+    position: absolute;
+    bottom: 25px;
+    /* Moved down from 40px */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 10;
+    opacity: 0;
+}
+
+.hero-active .scroll-down-container {
+    animation: fadeIn 1s ease 1.5s forwards;
+}
+
+.mouse-icon {
+    width: 26px;
+    height: 42px;
+    border: 2px solid rgba(167, 139, 250, 0.4);
+    /* Soft purple border */
+    border-radius: 20px;
+    position: relative;
+    background: rgba(167, 139, 250, 0.05);
+}
+
+.wheel {
+    width: 4px;
+    height: 8px;
+    background: linear-gradient(to bottom, #d8b4fe, #a78bfa);
+    /* Light purple gradient */
+    border-radius: 2px;
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: scroll-wheel 2s infinite;
+}
+
+.scroll-text {
+    font-size: 0.75rem;
+    background: linear-gradient(120deg, #a78bfa, #c084fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+    .hero-title {
+        font-size: 6.5rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .hero-title {
+        font-size: 5rem;
+    }
+
+    .hero-split-container {
+        padding: 0 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-split-container {
+        flex-direction: column-reverse;
+        justify-content: center;
+        padding-top: 100px;
+        text-align: center;
+    }
+
+    .hero-left {
+        align-items: center;
+        padding: 20px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .hero-content {
+        text-align: center;
+        max-width: 100%;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .hero-description {
+        text-align: center;
+        margin: 0 auto 2rem;
+        font-size: 1.2rem;
+    }
+
+    .hero-cta {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .sphere-wrapper {
+        width: 100%;
+        height: 500px;
+        /* Increased height */
+        margin: 0;
+        position: absolute;
+        top: 15vh;
+        /* Center it better vertically in mobile layout */
+        left: 0;
+    }
+
+    .scroll-down-container {
+        bottom: 12px;
+    }
+}
+
+/* ===================================
+   Interaction Hint
+   =================================== */
+/* ===================================
+   Interaction Hint
+   =================================== */
+.interaction-hint {
+    /* Position is handled by parent flex/grid usually, but we set defaults if absolute */
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(127, 82, 255, 0.9) !important;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    /* pointer-events: none;  <-- Allow clicking if it overlaps, but generally pass through? Actually let's just be label */
+    cursor: default;
+
+    opacity: 0;
+    animation: fadeInHint 1.0s ease-out 0.5s forwards, pulseHint 3s infinite ease-in-out 2s;
+
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(4px);
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(127, 82, 255, 0.15);
+    display: inline-flex;
+    /* Changed to inline-flex */
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 5px 20px rgba(127, 82, 255, 0.1);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.interaction-hint.hidden {
+    opacity: 0 !important;
+    transform: translateY(-40px);
+    /* Float up on exit */
+    pointer-events: none;
+    animation: none;
+}
+
+.hint-icon {
+    font-size: 1rem;
+    animation: spinHint 4s linear infinite;
+}
+
+@keyframes fadeInHint {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(-50%);
+    }
+}
+
+@keyframes pulseHint {
+    0% {
+        transform: translateY(-50%) scale(1);
+        box-shadow: 0 5px 20px rgba(127, 82, 255, 0.15);
+    }
+
+    50% {
+        transform: translateY(-50%) scale(1.03);
+        box-shadow: 0 10px 25px rgba(127, 82, 255, 0.25);
+    }
+
+    100% {
+        transform: translateY(-50%) scale(1);
+        box-shadow: 0 5px 20px rgba(127, 82, 255, 0.15);
+    }
+}
+
+@keyframes spinHint {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===================================
+   Click Ripple Hint
+   =================================== */
+.click-ripple-hint {
+    position: absolute;
+    top: 50%;
+    left: 63%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.click-ripple-hint.hidden {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+.click-label {
+    position: relative;
+    z-index: 2;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #7F52FF;
+    letter-spacing: 0.5px;
+    animation: clickPulse 2s ease-in-out infinite;
+}
+
+.ripple-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(127, 82, 255, 0.45);
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+    animation: rippleExpand 2.4s ease-out infinite;
+}
+
+.ripple-ring-2 {
+    animation-delay: 0.6s;
+}
+
+.ripple-ring-3 {
+    animation-delay: 1.2s;
+}
+
+@keyframes rippleExpand {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(2.2);
+        opacity: 0;
+    }
+}
+
+@keyframes clickPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@media (max-width: 900px) {
+    .click-ripple-hint {
+        top: 35% !important;
+        /* Move higher up to separate from scroll-down */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100px;
+        height: 100px;
+    }
+}
